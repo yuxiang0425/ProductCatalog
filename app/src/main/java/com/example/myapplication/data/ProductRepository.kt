@@ -15,10 +15,10 @@ class ProductRepository {
         api = retrofit.create(ProductApi::class.java)
     }
 
-    suspend fun getProducts(): ProductResponse {
+    suspend fun getProducts(skip: Int=0,limit: Int=20): ProductResponse {
         return api.getProducts(
-            limit = 20,
-            skip = 0
+            limit = limit,
+            skip = skip
         )
     }
 }
