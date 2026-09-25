@@ -76,15 +76,14 @@ fun ProductListScreen(
 
         is ProductUiState.Success -> {
             val listState = rememberLazyListState()
-            val shouldLoadMore by remember{
+            val lastVisibleIndex by remember(state.products.size){
                 derivedStateOf{
-                    val lastVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-                    lastVisibleIndex >= state.products.size - 5
+                    listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
                 }
             }
 
-            LaunchedEffect(shouldLoadMore, state.endReached){
-                if(shouldLoadMore && !state.endReached){
+            LaunchedEffect(lastVisibleIndex, state.endReached, state.products.size){
+                if(!state.endReached && lastVisibleIndex >= state.products.size -5){
                     viewModel.loadMoreProducts()
                 }
             }
